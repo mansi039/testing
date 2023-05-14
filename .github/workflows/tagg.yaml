@@ -1,0 +1,27 @@
+name: Release
+on:
+  push:
+    branches:
+    - "main"
+  workflow_dispatch:
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+
+    - name: Create and publish a release tag
+      run: |
+        PACKAGE_VERSION="v$(python setup.py --version)"
+        git config --global user.email "Build Service"
+        git config --global user.name "Build Service"
+        git tag -a $PACKAGE_VERSION -m "Releasing version $PACKAGE_VERSION"
+        git push origin $PACKAGE_VERSION
