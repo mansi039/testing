@@ -1,16 +1,13 @@
 name: Release
 on:
-  push:
-    branches:
-    - "main"
-  workflow_dispatch:
+  pull_request:
+    types:
+    - closed
+  
 
 jobs:
-  Release:
+  Create-tag:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
 
     steps:
     - name: Checkout Code
@@ -18,7 +15,8 @@ jobs:
       with:
         fetch-depth: 2
 
-    - name: Create and publish a release tag
+    - name: Create tag
+      if: github.event.pull_request.merged == true
       run: |
      
         git config --global user.email "action@github.com"
