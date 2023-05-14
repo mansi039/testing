@@ -22,6 +22,6 @@ jobs:
       run: |
      
         git config --global user.email "mdmansidixit@gmail.com"
-        git config --global user.name "mansi039!"
+        git config --global user.name "mansi039"
         git tag -a "v1.0.0" -m "creating tag"
         git push origin "v1.0.0"
