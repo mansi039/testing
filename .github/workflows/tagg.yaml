@@ -21,7 +21,7 @@ jobs:
     - name: Create and publish a release tag
       run: |
      
-        git config --global user.email "mdmansidixit@gmail.com"
-        git config --global user.name "mansi dixit"
+        git config --global user.email "action@github.com"
+        git config --global user.name "Github Action"
         git tag -a "v1.0.0" -m "creating tag"
         git push origin "v1.0.0"
