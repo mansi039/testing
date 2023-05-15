@@ -1,0 +1,22 @@
+name: Create Tag for Merged PR
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Create Tag
+        run: |
+          if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            prNumber=${{ github.event.pull_request.number }}
+            tagName="pr-${prNumber}"
+            git tag -a "${tagName}" -m "Tag for merged PR #${prNumber}" ${{ github.sha }}
+            git push origin "${tagName}"
+          fi
