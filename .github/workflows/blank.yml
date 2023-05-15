@@ -2,7 +2,7 @@ name: Bump version
 on:
   push:
     branches:
-    - "main"
+    - "development"
   workflow_dispatch:
 jobs:
   build:
