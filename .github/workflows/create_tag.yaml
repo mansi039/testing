@@ -14,9 +14,12 @@ jobs:
 
       - name: Create Tag
         run: |
-          if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            git config user.email "mdmansi.dixit@gmail.com"
+            git config user.name "mansidixit039"
+            if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
             prNumber=${{ github.event.pull_request.number }}
             tagName="pr-${prNumber}"
             git tag -a "${tagName}" -m "Tag for merged PR #${prNumber}" ${{ github.sha }}
             git push origin "${tagName}"
-          fi
+            fi
+            done
