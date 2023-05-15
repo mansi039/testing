@@ -14,8 +14,8 @@ jobs:
 
       - name: Create Tag
         run: |
-            git config user.email "mdmansi.dixit@gmail.com"
-            git config user.name "mansidixit039"
+            git config --local user.email "mdmansi.dixit@gmail.com"
+            git config --local user.name "mansidixit039"
             if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
             prNumber=${{ github.event.pull_request.number }}
             tagName="pr-${prNumber}"
