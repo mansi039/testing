@@ -1,0 +1,25 @@
+name: Release
+on:
+  pull_request:
+    types:
+    - closed
+  
+
+jobs:
+  Create-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+
+    - name: Create tag
+      if: github.event.pull_request.merged == true
+      run: |
+     
+        git config --global user.email "action@github.com"
+        git config --global user.name "Github Action"
+        git tag -a "v1.0.0" -m "creating tag"
+        git push origin "v1.0.0"
