@@ -7,19 +7,18 @@ on:
 
 jobs:
   create-tag:
+    
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Create Tag
-        run: |
-            git config --local user.email "mdmansi.dixit@gmail.com"
-            git config --local user.name "mansidixit039"
-            if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
-            prNumber=${{ github.event.pull_request.number }}
-            tagName="pr-${prNumber}"
-            git tag -a "${tagName}" -m "Tag for merged PR #${prNumber}" ${{ github.sha }}
-            git push origin "${tagName}"
-            fi
-            done
+      - uses: actions/checkout@v2
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
