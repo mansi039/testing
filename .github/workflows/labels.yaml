@@ -5,7 +5,14 @@ on:
     types: opened
 
 jobs:
-  add_labels:
+  Add_Labels:
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == false) &&
+      ((contains(github.head_ref, 'feature') && github.base_ref == 'development') ||
+      (github.head_ref == 'development' && github.base_ref == 'release') ||
+      (github.head_ref == 'release' && github.base_ref == 'main') ||
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'release') ||
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'main'))
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -13,7 +20,7 @@ jobs:
 
       - name: add labels
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ startsWith(github.event.comment.body, '/add-labels') }}
+        if: ${{ startsWith(github.event_name == 'pull_request', '/add-labels') }}
         with:
           labels: |
             documentation
