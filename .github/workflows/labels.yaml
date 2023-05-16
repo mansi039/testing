@@ -5,7 +5,14 @@ on:
     types: opened
 
 jobs:
-  add_labels:
+  Add_Labels:
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == false) &&
+      ((contains(github.head_ref, 'feature') && github.base_ref == 'development') ||
+      (github.head_ref == 'development' && github.base_ref == 'release') ||
+      (github.head_ref == 'release' && github.base_ref == 'master') ||
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'release') ||
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'master'))
     runs-on: ubuntu-latest
     steps:
       - name: checkout
