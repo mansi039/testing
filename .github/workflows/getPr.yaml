@@ -1,6 +1,9 @@
 name: Get Closed PRs
 
-workflow_dispatch
+on:
+  push:
+    branches:
+      - main
 
    
 jobs:
