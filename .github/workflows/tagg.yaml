@@ -1,8 +1,4 @@
 name: Release
-on:
-  pull_request:
-    types:
-    - closed
   
 
 jobs:
