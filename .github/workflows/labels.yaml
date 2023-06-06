@@ -9,16 +9,21 @@ env:
   USERNAME: ${{ github.actor }}
 
 jobs:
- runs-on: ubuntu-latest
- steps:   
+  GET-CLOSED-PRS:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 2   
     - name: creating label
       run: |
-    curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": feat","color":"1d76db"}'
-curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": fix","color":"e99695"}'
-curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": docs","color":"c5def5"}'
-curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": style","color":"bfdadc"}'
-curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": refactor","color":"c2e0c6"}'
-curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": test","color":"fef2c0"}'
-curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": chore","color":"d4c5f9"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": feat","color":"1d76db"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": fix","color":"e99695"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": docs","color":"c5def5"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": style","color":"bfdadc"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": refactor","color":"c2e0c6"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": test","color":"fef2c0"}'
+        curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": chore","color":"d4c5f9"}'
 
 
