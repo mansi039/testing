@@ -1,6 +1,6 @@
 name: Create Labels
 on:
-workflow_dispatch
+ push
 
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
