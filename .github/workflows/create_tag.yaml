@@ -1,25 +1,17 @@
-name: Create Tag for Merged PR
-
+name: auto_tagger
 on:
   pull_request:
-    types:
-      - closed
-
+   types: [closed]
 jobs:
-  create-tag:
+  build:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Create Tag
-        run: |
-            git config --local user.email "mdmansi.dixit@gmail.com"
-            git config --local user.name "mansidixit039"
-            if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
-            prNumber=${{ github.event.pull_request.number }}
-            tagName="pr-${prNumber}"
-            git tag -a "${tagName}" -m "Tag for merged PR #${prNumber}" ${{ github.sha }}
-            git push origin "${tagName}"
-            fi
-            done
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 0
+    - name: Bump version and push tag
+      uses: RueLaLa/auto-tagger@master
+      env:
+        GH_TOKEN_PATH: ${{ secrets.GH_TOKEN_PATH }}
+        GITHUB_PR_NUMBER: ${{ github.event.number }}
