@@ -1,28 +1,21 @@
-name: Pull Request Labels
-on:
-  pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
+name: Create Labels
+workflow_dispatch
+
+env:
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+  REPO: ${{ github.repository }}
+  GH_TOKEN_PATH: ${{ secrets.GH_TOKEN_PATH }}
+  USERNAME: ${{ github.actor }}
+
 jobs:
-  label:
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-    outputs:
-      status: ${{ steps.check-labels.outputs.status }}
-    steps:
-      - id: check-labels
-        uses: mheap/github-action-required-labels@v4
-        with:
-          mode: exactly
-          count: 1
-          labels: "semver:patch, semver:minor, semver:major"
-          exit_type: success
-  do-other:
-    runs-on: ubuntu-latest
-    needs: label
-    steps:
-      - run: echo SUCCESS
-        if: needs.label.outputs.status == 'success'
-      - run: echo FAILURE && exit 1
-        if: needs.label.outputs.status == 'failure'
+ runs-on: ubuntu-latest
+ steps:   
+    - name: creating label
+      run: |
+    curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": feat","color":"1d76db"}'
+curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": fix","color":"e99695"}'
+curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": docs","color":"c5def5"}'
+curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": style","color":"bfdadc"}'
+curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": refactor","color":"c2e0c6"}'
+curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": test","color":"fef2c0"}'
+curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": chore","color":"d4c5f9"}'
