@@ -19,3 +19,5 @@ curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authoriz
 curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": refactor","color":"c2e0c6"}'
 curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": test","color":"fef2c0"}'
 curl -f -X POST https://api.github.com/repos/$USERNAME/$REPO/labels -H "Authorization: token $(cat $GH_TOKEN_PATH)" -d '{"name":": chore","color":"d4c5f9"}'
+
+
