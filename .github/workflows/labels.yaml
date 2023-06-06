@@ -1,4 +1,5 @@
 name: Create Labels
+on:
 workflow_dispatch
 
 env:
