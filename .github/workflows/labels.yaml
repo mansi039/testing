@@ -2,7 +2,6 @@ name: Create Labels
 on:
  push
 
-
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
   REPO: ${{ github.repository }}
@@ -19,8 +18,5 @@ jobs:
         fetch-depth: 2   
     - name: creating label
       run: |
-        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: Bearer $GH_TOKEN_PATH" -H "X-GitHub-Api-Version: 2022-11-28" -d '{"name":"bamboo": feat","color":"1d76db"}'
-        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: Bearer $GH_TOKEN_PATH" -H "X-GitHub-Api-Version: 2022-11-28" -d '{"name":"wood": fix","color":"e99695"}'
-
-
-
+        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: token $GH_TOKEN_PATH" -d '{"name":"bamboo": feat","color":"1d76db"}'
+        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: token $GH_TOKEN_PATH" -d '{"name":"wood": fix","color":"e99695"}'
