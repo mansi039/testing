@@ -13,5 +13,5 @@ jobs:
     - name: Bump version and push tag
       uses: RueLaLa/auto-tagger@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN_PATH: ${{ secrets.GH_TOKEN_PATH }}
         GITHUB_PR_NUMBER: ${{ github.event.number }}
