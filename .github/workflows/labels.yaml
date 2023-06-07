@@ -3,7 +3,7 @@ on:
  push
 
 env:
-  PR_NUMBER: ${{ github.event.pull_request.number }}
+  
   REPO: ${{ github.repository }}
   GH_TOKEN_PATH: ${{ secrets.GH_TOKEN_PATH }}
   USERNAME: ${{ github.actor }}
@@ -18,5 +18,5 @@ jobs:
         fetch-depth: 2   
     - name: creating label
       run: |
-        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: token $GH_TOKEN_PATH" -d '{"name":": feat","color":"1d76db"}'
-        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: token $GH_TOKEN_PATH" -d '{"name":": fix","color":"e99695"}'
+        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: token $GH_TOKEN_PATH" -d '{"name":"feat","description":this is for one","color":"1d76db"}'
+        curl -f -X POST https://api.github.com/repos/mansi039/testing/labels -H "Authorization: token $GH_TOKEN_PATH" -d '{"name":"fix","description":this is for two","color":"e99695"}'
