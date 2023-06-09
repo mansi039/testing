@@ -1,0 +1,26 @@
+name: Create Tag on PR Merge
+on:
+  push
+      
+env:
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+  PROJECT_REPO: ${{ github.repository }}
+
+  GH_TOKEN_PATH: ${{ secrets.GH_TOKEN_PATH }}
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create tag
+        
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GH_TOKEN_PATH" "https://api.github.com/repos/mansi039/testing/git/refs" -d '{"ref": "refs/tags/TAG_NAME","sha": "${{ github.sha }}"}'
+          
+          
+          
