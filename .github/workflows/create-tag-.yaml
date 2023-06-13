@@ -6,7 +6,7 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
   PROJECT_REPO: ${{ github.repository }}
 
-  GH_TOKEN_PATH: ${{ secrets.GH_TOKEN_PATH }}
+
 
 jobs:
   create-tag:
@@ -17,10 +17,9 @@ jobs:
 
       - name: Create tag
         
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
         run: |
-          curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GH_TOKEN_PATH" "https://api.github.com/repos/mansi039/testing/git/refs" -d '{"ref": "refs/tags/TAG_NAME","sha": "${{ github.sha }}"}'
+          curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer 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" "https://api.github.com/repos/mansi039/testing/git/refs" -d '{"ref": "refs/tags/$NEW_TAG","sha": "${{ github.sha }}"}'
           
           
           
