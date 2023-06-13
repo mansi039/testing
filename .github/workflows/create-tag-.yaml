@@ -1,25 +1,36 @@
-name: Create Tag on PR Merge
+name: Create Incremental Tag
+
 on:
-  push
-      
-env:
-  PR_NUMBER: ${{ github.event.pull_request.number }}
-  PROJECT_REPO: ${{ github.repository }}
-
-
+  pull_request:
+    types:
+      - closed
 
 jobs:
-  create-tag:
+  create_tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Create tag
-        
-
+      - name: Get Latest Tag
+        id: get_latest_tag
         run: |
-          curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer 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" "https://api.github.com/repos/mansi039/testing/git/refs" -d '{"ref": "refs/tags/$NEW_TAG","sha": "${{ github.sha }}"}'
-          
-          
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "::set-output name=latest_tag::$LATEST_TAG"
+
+      - name: Determine New Tag
+        id: determine_tag
+        run: |
+          LATEST_TAG=${{ steps.get_latest_tag.outputs.latest_tag }}
+          TAG_NUMBER=$(echo $LATEST_TAG | grep -oP '\d+')
+          NEW_TAG="v$((TAG_NUMBER + 1))"
+          echo "::set-output name=new_tag::$NEW_TAG"
+
+      - name: Create Tag
+        id: create_tag
+        run: |
+          NEW_TAG=${{ steps.determine_tag.outputs.new_tag }}
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
+          echo "::set-output name=tag_name::$NEW_TAG"
           
