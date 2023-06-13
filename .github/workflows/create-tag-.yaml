@@ -22,7 +22,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $TOKEN" "https://api.github.com/repos/mansi039/$PROJECT_REPO/git/refs" -d '{"ref": "refs/tags/TAG_NAME","sha": "${{ github.sha }}"}'
+          LATEST_TAG = $(git describe --abbrev=0 --tags)
+          NEW_TAG = $(LATEST_TAG+1)
+          curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $TOKEN" "https://api.github.com/repos/mansi039/$PROJECT_REPO/git/refs" -d '{"ref": "refs/tags/$NEW_TAG","sha": "${{ github.sha }}"}'
           
           
           
