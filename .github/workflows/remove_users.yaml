@@ -3,6 +3,7 @@ name: check user activity
 on:
  push
  
+ 
 jobs:
  check_activity:
   runs-on: ubuntu-latest
