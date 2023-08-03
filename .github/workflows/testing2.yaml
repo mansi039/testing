@@ -34,95 +34,14 @@ env:
   RP: ${{ github.repository }}
 
 jobs:
-  run-databricks-job:
+  build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
+      - uses: actions/checkout@v2
 
-      - name: Run Databricks Job
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS_DEV: ${{ secrets.MDZ_D_CICD_EXT_SA }}
-          GOOGLE_APPLICATION_CREDENTIALS_QA: ${{ secrets.MDZ_Q_CICD_EXT_SA }}
-          GOOGLE_APPLICATION_CREDENTIALS_PROD: ${{ secrets.MDZ_P_CICD_EXT_SA }}
-          GOOGLE_APPLICATION_CREDENTIALS_EXPL: ${{ secrets.MDZ_E_CICD_EXT_SA }}
-        run: |
-          ENV=${{ github.event.inputs.environment }}
-          REPO_NAME=`echo $RP | cut -f 2 -d /`
-          echo "Environment=${{ github.event.inputs.environment }}"
-
-          if [[ $ENV == prod ]]; then
-            GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_PROD }}"
-            DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_PROD }}"
-            DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_PROD }}"
-            GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_PROD"
-          elif [[ $ENV == qa ]]; then
-            GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_QA }}"
-            DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_QA }}"
-            DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_QA }}"
-            GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_QA"
-          elif [[ $ENV == dev ]]; then
-            GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_DEV }}"
-            DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_DEV }}"
-            DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_DEV }}"
-            GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_DEV"
-          elif [[ $ENV == expl ]]; then
-            GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_EXPL }}"
-            DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_EXPL }}"
-            DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_EXPL }}"
-            GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_EXPL"
-          else
-            echo "Invalid environment specified."
-            exit 1
-          fi
-
-          echo $GOOGLE_APPLICATION_CREDENTIALS > $GITHUB_WORKSPACE/devops/key.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/devops/key.json
-          gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/devops/key.json
-
-          pip install databricks-cli && pip install databricks-cli --upgrade
-          echo "[DEFAULT]" >> ~/.databrickscfg
-          echo "host = $DATABRICKS_HOST" >> ~/.databrickscfg
-          echo "token = $DATABRICKS_TOKEN" >> ~/.databrickscfg
-          databricks jobs run-now --job-id $JOBID
-          # Add any additional steps to rerun tasks, using the provided inputs
-          # Example:
-          # databricks jobs run-now --job-id $TASK_ID --notebook-params "$NOTEBOOK_PARAMS"
-
-          # Check if latest_repair_id is empty or not and construct the data accordingly
-          if [[ $latest_repair_id == "" ]]
-          then
-            data=$(cat <<EOF
-{
-  "run_id": $run_id,
-  "rerun_tasks": $tasksToRerun,
-  "notebook_params": $notebookParams
-}
-EOF
-)
-          else  
-            data=$(cat <<EOF
-{
-  "run_id": $run_id,
-  "rerun_tasks": $tasksToRerun,
-  "notebook_params": $notebookParams,
-  "latest_repair_id": $latestRepairID
-}
-EOF
-)
-          fi
-          echo $data
-          
-          # Make the curl POST request
-          # Replace $URL and $token with appropriate values for your use case
-          # Example:
-          # curl -X POST $URL \
-          #      -H "Authorization: Bearer $token" \
-          #      -H "Content-Type: application/json" \
-          #      -d "$data"
+      - name: greet
+        run: | 
+          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
+          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
+          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
