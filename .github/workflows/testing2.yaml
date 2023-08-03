@@ -3,9 +3,8 @@ name: Run-DB-Job-with-JobID
 on:
   workflow_dispatch:
     inputs:
-      environment:
+      choice:
         description: 'Select the environment'
-        required: true
         options:
           - prod
           - qa
