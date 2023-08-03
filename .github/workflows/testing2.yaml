@@ -6,7 +6,6 @@ on:
       environment:
         description: 'Select the environment'
         required: true
-        default: 'prod'
         options:
           - prod
           - qa
