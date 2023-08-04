@@ -3,8 +3,8 @@ name: Run-DB-Job-with-JobID
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        type: environment
+      choice:
+        type: choice
         description: 'Select the environment'
         options:
           - prod
@@ -37,10 +37,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
-      - name: greet
-        run: | 
-          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
-          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
-          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+      - name: Run Databricks Job
+        run: |
+          ENV=${{ github.event.inputs.choice }}
+          REPO_NAME=`echo $RP | cut -f 2 -d /`
+          echo "Environment=${{ github.event.inputs.choice }}"
+
+
