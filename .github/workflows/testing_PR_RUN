@@ -7,58 +7,50 @@ on:
     branches:
       - development
       - release
-      - master
+      - main
 
-jobs:
-  job1:
+jobs:  
+  Deploy-Jobs:
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) &&
+      ((contains(github.head_ref, 'user') && github.base_ref == 'development') ||
+      (github.head_ref == 'development' && github.base_ref == 'release') ||
+      (github.head_ref == 'release' && github.base_ref == 'master') ||
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'release') ||
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'master'))
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: Step 1
+    - name: Checkout Code
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 2
+
+    - name: Step 1
         run: echo "Job 1 executed"
 
-  job2:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 2
+    - name: Step 2
         run: echo "Job 2 executed"
 
-  job3:
-    if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      (contains(github.head_ref, 'user') && github.base_ref == 'development')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 3
-        run: echo "Job 3 executed"
-
-  job4:
-    if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      (github.head_ref == 'development' && github.base_ref == 'release')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 4
-        run: echo "Job 4 executed"
+    - name: Step 2
+        run: echo "Job 2 executed"
 
 
-  job5:
+    - name: Step 2
+        run: echo "Job 2 executed"
+
+      - name: Step 6
     if: >
       github.event_name == 'pull_request' &&
       github.event.pull_request.merged == true &&
       (contains(github.head_ref, 'hotfix') && github.base_ref == 'master')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 6
         run: echo "Job 6 executed"
 
-  job6:
+      - name: Step 7
     if: >
       github.event_name == 'pull_request' &&
       github.event.pull_request.merged == true &&
       (contains(github.head_ref, 'hotfix') && github.base_ref == 'master')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 7
         run: echo "Job 7 executed"
