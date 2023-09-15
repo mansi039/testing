@@ -1,4 +1,4 @@
-name: My GitHub Action Workflow
+name: TESTING FOR PR RUN
 
 on:
   pull_request:
@@ -30,28 +30,28 @@ jobs:
         fetch-depth: 2
 
     - name: Step 1
-        run: echo "Job 1 executed"
+      run: echo "Job 1 executed"
 
     - name: Step 2
-        run: echo "Job 2 executed"
+      run: echo "Job 2 executed"
 
     - name: Step 2
-        run: echo "Job 2 executed"
+      run: echo "Job 2 executed"
 
 
     - name: Step 2
-        run: echo "Job 2 executed"
+      run: echo "Job 2 executed"
 
-      - name: Step 6
-    if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      (contains(github.head_ref, 'hotfix') && github.base_ref == 'main')
+    - name: Step 6
+      if: >
+       github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       (contains(github.head_ref, 'hotfix') && github.base_ref == 'main')
         run: echo "Job 6 executed"
 
-      - name: Step 7
-    if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      (contains(github.head_ref, 'hotfix') && github.base_ref == 'main')
+    - name: Step 7
+      if: >
+       github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       (contains(github.head_ref, 'hotfix') && github.base_ref == 'main')
         run: echo "Job 7 executed"
