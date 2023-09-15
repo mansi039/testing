@@ -2,12 +2,13 @@ name: My GitHub Action Workflow
 
 on:
   pull_request:
-    types:
-      - closed
+
     branches:
       - development
       - release
       - main
+    types:
+      - closed
 
 jobs:  
   Deploy-Jobs:
