@@ -15,9 +15,9 @@ jobs:
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true) &&
       ((contains(github.head_ref, 'user') && github.base_ref == 'development') ||
       (github.head_ref == 'development' && github.base_ref == 'release') ||
-      (github.head_ref == 'release' && github.base_ref == 'master') ||
+      (github.head_ref == 'release' && github.base_ref == 'main') ||
       (contains(github.head_ref, 'hotfix') && github.base_ref == 'release') ||
-      (contains(github.head_ref, 'hotfix') && github.base_ref == 'master'))
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'main'))
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -45,12 +45,12 @@ jobs:
     if: >
       github.event_name == 'pull_request' &&
       github.event.pull_request.merged == true &&
-      (contains(github.head_ref, 'hotfix') && github.base_ref == 'master')
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'main')
         run: echo "Job 6 executed"
 
       - name: Step 7
     if: >
       github.event_name == 'pull_request' &&
       github.event.pull_request.merged == true &&
-      (contains(github.head_ref, 'hotfix') && github.base_ref == 'master')
+      (contains(github.head_ref, 'hotfix') && github.base_ref == 'main')
         run: echo "Job 7 executed"
