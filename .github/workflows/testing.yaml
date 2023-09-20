@@ -1,0 +1,125 @@
+name: Run-DB-Job-with-JobID
+on:
+  workflow_dispatch:
+    inputs:
+        choice:
+          type: choice
+          description: Make a choice
+          options:
+          - exp
+          - dev
+          - qa
+          - prd
+        jobID:
+          description: 'ENTER JOB ID'
+          required: true
+          default: '0'
+        tasksToRerun:
+          description: 'Tasks to rerun'
+          required: true
+        notebookParams:
+          description: 'Notebook parameters of tasks to rerun'
+          required: true
+        runID:
+          description: 'Run_ID of existing run'
+          required: true
+        latestRepairID:
+          description: 'Latest repair ID'
+          required: true
+env:
+  RP: ${{ github.repository }}
+
+jobs:
+  run-databricks-job:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+        
+     
+    - name: Run Databricks Job
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS_DEV: ${{ secrets.MDZ_D_CICD_EXT_SA }}
+        GOOGLE_APPLICATION_CREDENTIALS_QA: ${{ secrets.MDZ_Q_CICD_EXT_SA }}
+        GOOGLE_APPLICATION_CREDENTIALS_PROD: ${{ secrets.MDZ_P_CICD_EXT_SA }}
+        GOOGLE_APPLICATION_CREDENTIALS_EXPL: ${{ secrets.MDZ_E_CICD_EXT_SA }}
+      run: |
+        BRANCH=${{ github.ref_name }}
+        REPO_NAME=`echo $RP | cut -f 2 -d /`
+        echo "Branch=${{ github.ref_name }}"
+
+        if [[ $ENV == prd ]]; then
+          ENV=prod
+          BRANCH_NAME=`echo $BR`
+          GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_PROD }}"
+          DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_PROD }}"
+          DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_PROD }}"
+          GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_PROD"
+        elif [[ $ENV == qa ]]; then
+          ENV=qa
+          BRANCH_NAME=`echo $BR`
+          GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_QA }}"
+          DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_QA }}"
+          DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_QA }}"
+          GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_QA"
+        elif [[ $ENV == dev ]]; then
+          ENV=dev
+          BRANCH_NAME=`echo $BR`
+          GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_DEV }}"
+          DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_DEV }}"
+          DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_DEV }}"
+          GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_DEV"
+        elif [[ $ENV == exp ]]; then
+          ENV=expl
+          BRANCH_NAME=`echo $BR`
+          GS_ACCOUNT="${{ secrets.GOOGLE_SERVICE_ACCOUNT_EXPL }}"
+          DATABRICKS_HOST="${{ secrets.DATABRICKS_HOST_EXPL }}"
+          DATABRICKS_TOKEN="${{ secrets.DATABRICKS_TOKEN_EXPL }}"
+          GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_EXPL"
+        fi
+        echo $GOOGLE_APPLICATION_CREDENTIALS > $GITHUB_WORKSPACE/devops/key.json
+        export GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/devops/key.json
+        gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/devops/key.json
+        
+        pip install databricks-cli && pip install databricks-cli --upgrade
+        echo "[DEFAULT]" >> ~/.databrickscfg
+        echo "host = $DATABRICKS_HOST" >> ~/.databrickscfg
+        echo "token = $DATABRICKS_TOKEN" >> ~/.databrickscfg
+        
+        if [[ $latest_repair_id == "" ]]
+then
+     data=$(cat <<EOF
+{
+  "run_id": $run_id,
+  "rerun_tasks": $tasks,
+  "notebook_params": $notebook_params
+  }
+EOF
+)
+else  
+  data=$(cat <<EOF
+{
+  "run_id": $run_id,
+  "rerun_tasks": $tasks,
+  "notebook_params": $notebook_params,
+  "latest_repair_id": $latest_repair_id
+}
+EOF
+)
+fi
+echo $data
+# Make the curl POST request
+curl -X POST $URL \
+     -H "Authorization: Bearer $token" \
+     -H "Content-Type: application/json" \
+     -d "$data"
+        
+      
+        
+

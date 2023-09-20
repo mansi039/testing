@@ -1,0 +1,40 @@
+name: check user activity
+
+on:
+ push
+ 
+ 
+jobs:
+ check_activity:
+  runs-on: ubuntu-latest
+  steps:
+   - name: Checkout Repo
+     uses: actions/checkout@v2
+     
+   - name: Check user activity
+     id: check_activity
+     run: |
+       for (page=1, page<=4, page++); do
+       {
+       curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer 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" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/orgs/mansi039/members?per_page=100&page=1 | | grep login | cut -d '"' -f 4 > users.txt
+       }
+
+       for USERNAME in `cat USERS.txt`; do
+       RESPONSE=$(curl -s "https://api.github.com/users/$USERNAME/events/public")
+       LAST_ACTIVITY=$(echo "$RESPONSE" | jq -r '.[0].created_at')
+       LAST_ACTIVITY_DATE=$(date -d "$LAST_ACTIVITY" +%s)
+          CURRENT_DATE=$(date +%s)
+          DAYS_SINCE_ACTIVITY=$(( ($CURRENT_DATE - $LAST_ACTIVITY_DATE) / (60 * 60 * 24) ))
+
+          echo "::set-output name=days_since_activity::$DAYS_SINCE_ACTIVITY"
+
+   - name: Check User Inactivity
+     id: check_inactivity
+     run: |
+          DAYS_SINCE_ACTIVITY=${{ steps.check_activity.outputs.days_since_activity }}
+          THRESHOLD_DAYS=90  
+          if [ $DAYS_SINCE_ACTIVITY -gt $THRESHOLD_DAYS ]; then
+            echo "User is inactive for more than $THRESHOLD_DAYS days"
+          else
+            echo "User is active within the last $THRESHOLD_DAYS days"
+          fi

@@ -1,0 +1,51 @@
+name: Run-DB-Job-with-JobID
+
+on:
+  workflow_dispatch:
+    inputs:
+      choice:
+        type: choice
+        description: 'Select the environment'
+        options:
+          - prod
+          - qa
+          - dev
+          - expl
+          
+      jobID:
+        description: 'ENTER JOB ID'
+        required: true
+        default: '0'
+      tasksToRerun:
+        description: 'List of tasks to rerun'
+        required: true
+      notebookParams:
+        description: 'Notebook parameters for the tasks to rerun'
+        required: true
+      runID:
+        description: 'Run ID of existing run'
+        required: true
+      latestRepairID:
+        description: 'Latest repair ID'
+        required: true
+
+env:
+  RP: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Run Databricks Job
+        run: |
+          ENV=${{ github.event.inputs.choice }}
+          REPO_NAME=`echo $RP | cut -f 2 -d /`
+          echo "Environment=${{ github.event.inputs.choice }}"
+
+
