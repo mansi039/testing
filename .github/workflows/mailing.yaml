@@ -25,6 +25,13 @@ jobs:
         echo "from mansii0903@gmail.com" >> ~/.msmtprc
         chmod 600 ~/.msmtprc
 
+    - name: Debug SMTP Configuration
+      run: |
+       echo "SMTP_SERVER: $SMTP_SERVER"
+       echo "SMTP_PORT: $SMTP_PORT"
+       echo "SMTP_USERNAME: $SMTP_USERNAME"
+       echo "SMTP_PASSWORD: $SMTP_PASSWORD"
+
     - name: Send Email Notification
       if: success()
       run: |
