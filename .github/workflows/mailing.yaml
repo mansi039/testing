@@ -1,0 +1,45 @@
+name: MAIL-TESTING
+on:
+  push
+
+jobs:          
+  SEND-NOTIFICATION:
+    - name: Install msmtp
+      run: sudo apt-get -y install msmtp msmtp-mta
+
+    - name: Configure msmtp
+      run: |
+        echo "account default" > ~/.msmtprc
+        echo "host $SMTP_SERVER" >> ~/.msmtprc
+        echo "port $SMTP_PORT" >> ~/.msmtprc
+        echo "user $SMTP_USERNAME" >> ~/.msmtprc
+        echo "password $SMTP_PASSWORD" >> ~/.msmtprc
+        echo "from sender@example.com" >> ~/.msmtprc
+        chmod 600 ~/.msmtprc
+
+    - name: Send Email Notification
+      if: success()
+      run: |
+        echo "Subject: Deployment Successful" > email.txt
+        echo "To: mdmansidixit@gmail.com" >> email.txt
+        echo "From: mansii0903@gmail.com" >> email.txt
+        echo "Content-Type: text/plain; charset=utf-8" >> email.txt
+        echo "" >> email.txt
+        echo "The deployment was successful." >> email.txt
+
+        msmtp --from=mansii0903@gmail.com \
+          --host=$SMTP_SERVER \
+          --port=$SMTP_PORT \
+          --user=$SMTP_USERNAME \
+          --password=$SMTP_PASSWORD \
+          mdmansidixit@gmail.com < email.txt
+
+
+
+
+
+
+
+
+
+
