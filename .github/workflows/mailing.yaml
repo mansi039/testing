@@ -18,19 +18,19 @@ jobs:
     - name: Configure msmtp
       run: |
         echo "account default" > ~/.msmtprc
-        echo "host $SMTP_SERVER" >> ~/.msmtprc
-        echo "port $SMTP_PORT" >> ~/.msmtprc
-        echo "user $SMTP_USERNAME" >> ~/.msmtprc
-        echo "password $SMTP_PASSWORD" >> ~/.msmtprc
+        echo "host ${{secrets.SMTP_SERVER}}" >> ~/.msmtprc
+        echo "port ${{secrets.SMTP_PORT}}" >> ~/.msmtprc
+        echo "user ${{secrets.SMTP_USERNAME}}" >> ~/.msmtprc
+        echo "password ${{secrets.SMTP_PASSWORD}}" >> ~/.msmtprc
         echo "from mansii0903@gmail.com" >> ~/.msmtprc
         chmod 600 ~/.msmtprc
 
     - name: Debug SMTP Configuration
       run: |
-       echo "SMTP_SERVER: $SMTP_SERVER"
-       echo "SMTP_PORT: $SMTP_PORT"
-       echo "SMTP_USERNAME: $SMTP_USERNAME"
-       echo "SMTP_PASSWORD: $SMTP_PASSWORD"
+       echo "SMTP_SERVER: ${{secrets.SMTP_SERVER}}"
+       echo "SMTP_PORT: ${{secrets.SMTP_PORT}}"
+       echo "SMTP_USERNAME: ${{secrets.SMTP_USERNAME}}"
+       echo "SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD}}"
 
     - name: Send Email Notification
       if: success()
@@ -43,10 +43,10 @@ jobs:
         echo "The deployment was successful." >> email.txt
 
         msmtp --from=mansii0903@gmail.com \
-          --host=$SMTP_SERVER \
-          --port=$SMTP_PORT \
-          --user=$SMTP_USERNAME \
-          --password=$SMTP_PASSWORD \
+          --host=${{secrets.SMTP_SERVER}} \
+          --port=${{secrets.SMTP_PORT}} \
+          --user=${{secrets.SMTP_USERNAME}} \
+          --password=${{secrets.SMTP_PASSWORD}} \
           mdmansidixit@gmail.com < email.txt
 
 
