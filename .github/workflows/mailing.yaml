@@ -15,16 +15,6 @@ jobs:
     - name: Install msmtp
       run: sudo apt-get -y install msmtp msmtp-mta
 
-    - name: Configure msmtp
-      run: |
-        echo "account default" > ~/.msmtprc
-        echo "host ${{secrets.SMTP_SERVER}}" >> ~/.msmtprc
-        echo "port ${{secrets.SMTP_PORT}}" >> ~/.msmtprc
-        echo "user ${{secrets.SMTP_USERNAME}}" >> ~/.msmtprc
-        echo "password ${{secrets.SMTP_PASSWORD}}" >> ~/.msmtprc
-        echo "from mansii0903@gmail.com" >> ~/.msmtprc
-        chmod 600 ~/.msmtprc
-
     - name: Debug SMTP Configuration
       run: |
        echo "SMTP_SERVER: ${{secrets.SMTP_SERVER}}"
