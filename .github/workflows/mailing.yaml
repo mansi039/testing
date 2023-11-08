@@ -1,6 +1,7 @@
 name: MAIL-TESTING
 on:
   push
+  
 
 jobs:          
   SEND-NOTIFICATION:
