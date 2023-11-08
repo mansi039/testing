@@ -5,18 +5,16 @@ jobs:
     Mail-Sent:
      runs-on: ubuntu-latest
      steps:
-     - name: Send mail
-       uses: dawidd6/action-send-mail@v3
+     - name: Send some mail
+       uses: wadeww/send-email-action@master
        with:
-        server_address: smtp.gmail.com
-        # Server port, default 25:
-        server_port: 465
-
-        # Required mail subject:
-        subject: Github Actions job result
-        # Required recipients' addresses:
-        to: mdmansidixitr@gmail.com
-        # Required sender full name (address can be skipped):
-        from: Juhi Dixit # <user@example.com>
+         server_address: smtp.gmail.com
+         port: 465
+         username: ${{secrets.MAIL_USERNAME}}
+         password: ${{secrets.MAIL_PASSWORD}}
+         subject: Workflow finished
+         body: Job completed ${{job.status}}
+         to: mdmansidixit@gmail.com.com
+         from: Me
 
 
