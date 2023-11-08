@@ -4,6 +4,13 @@ on:
 
 jobs:          
   SEND-NOTIFICATION:
+   runs-on: ubuntu-latest
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 2
+  
     - name: Install msmtp
       run: sudo apt-get -y install msmtp msmtp-mta
 
@@ -14,7 +21,7 @@ jobs:
         echo "port $SMTP_PORT" >> ~/.msmtprc
         echo "user $SMTP_USERNAME" >> ~/.msmtprc
         echo "password $SMTP_PASSWORD" >> ~/.msmtprc
-        echo "from sender@example.com" >> ~/.msmtprc
+        echo "from mansii0903@gmail.com" >> ~/.msmtprc
         chmod 600 ~/.msmtprc
 
     - name: Send Email Notification
