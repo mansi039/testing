@@ -1,0 +1,24 @@
+name: GMAIL-TEST
+on:
+  push
+  
+
+jobs:          
+  GMAIL-TESTING:
+   runs-on: ubuntu-latest
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 2
+  
+
+    - name: Send mail
+      uses: dawidd6/action-send-mail@v3
+      with:
+    server_address: smtp.gmail.com
+    server_port: 465
+    subject: Github Actions job result
+    to: mdmansidixit@gmail.com
+    # Required sender full name (address can be skipped):
+    from: Juhi Dixit
