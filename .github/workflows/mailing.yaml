@@ -13,7 +13,7 @@ jobs:
         fetch-depth: 2
   
     - name: Install msmtp
-      run: sudo apt-get -y install msmtp msmtp-mta
+      run: sudo apt-get -y install msmtp
 
     - name: Debug SMTP Configuration
       run: |
