@@ -14,12 +14,14 @@ jobs:
         fetch-depth: 2
   
 
-    - name: Send mail
-      uses: dawidd6/action-send-mail@v3
+    - name: Send email, you star
+      uses: dawidd6/action-send-mail@v1.3.0
       with:
-       server_address: smtp.gmail.com
-       server_port: 465
-       subject: Github Actions job result
-       to: mdmansidixit@gmail.com
-    # Required sender full name (address can be skipped):
-       from: Juhi Dixit
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: mansii0903
+          password: JUHISATTU9766@
+          subject: Your a star
+          body: successful job run
+          to: mdmansidixit@gmail.com
+          from: mansii0903@gmail.com
