@@ -37,6 +37,7 @@ jobs:
           --port=${{secrets.SMTP_PORT}} \
           --user=${{secrets.SMTP_USERNAME}} \
           --password=${{secrets.SMTP_PASSWORD}} \
+          --tls=on \
           mdmansidixit@gmail.com < email.txt
 
 
